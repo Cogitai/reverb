@@ -26,7 +26,6 @@
 #include <cstdint>
 #include "absl/container/flat_hash_map.h"
 #include "absl/container/flat_hash_set.h"
-#include "absl/memory/memory.h"
 #include "absl/synchronization/mutex.h"
 #include "absl/time/clock.h"
 #include "absl/time/time.h"
@@ -414,7 +413,8 @@ bool Table::Get(Table::Key key, Table::Item* item) {
   return false;
 }
 
-const absl::flat_hash_map<Table::Key, Table::Item>* Table::RawLookup() {
+const absl::flat_hash_map<Table::Key, Table::Item, std::hash<Table::Key>>*
+    Table::RawLookup() {
   mu_.AssertReaderHeld();
   return &data_;
 }

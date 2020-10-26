@@ -29,6 +29,7 @@ from reverb import client
 from reverb import item_selectors
 from reverb import pybind
 from reverb import rate_limiters
+from reverb import replay_sample
 from reverb import reverb_types
 from reverb.platform.default import checkpointers
 
@@ -225,6 +226,9 @@ class Table:
     """Returns True if an insert operation is permitted at the current state."""
     return self.internal_table.can_insert(num_inserts)
 
+  def get_ptr(self) -> int:
+      """Return a pointer to this table as an int."""
+      return self.internal_table.get_ptr()
 
 class Server:
   """Reverb replay server.

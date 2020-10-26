@@ -35,6 +35,7 @@
 #include "reverb/cc/schema.pb.h"
 #include "reverb/cc/selectors/interface.h"
 #include "reverb/cc/table_extensions/interface.h"
+#include "tensorflow/core/framework/tensor.h"
 #include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/protobuf/struct.pb.h"
 
@@ -222,8 +223,8 @@ class Table {
   bool Get(Key key, Item* item) ABSL_LOCKS_EXCLUDED(mu_);
 
   // Get pointer to `data_`. Must only be called by extensions while lock held.
-  const absl::flat_hash_map<Key, Item>* RawLookup()
-      ABSL_ASSERT_SHARED_LOCK(mu_);
+  const absl::flat_hash_map<Table::Key, Table::Item, std::hash<Table::Key>>*
+      RawLookup() ABSL_ASSERT_SHARED_LOCK(mu_);
 
   // Removes all items and resets the RateLimiter to its initial state.
   tensorflow::Status Reset();
@@ -298,10 +299,10 @@ class Table {
 
   // Bijection of key to item. Used for storing the chunks and timestep range of
   // each item.
-  absl::flat_hash_map<Key, Item> data_ ABSL_GUARDED_BY(mu_);
+  absl::flat_hash_map<Key, Item, std::hash<Key>> data_ ABSL_GUARDED_BY(mu_);
 
   // Count of references from chunks referenced by items.
-  absl::flat_hash_map<uint64_t, int64_t> episode_refs_ ABSL_GUARDED_BY(mu_);
+  absl::flat_hash_map<uint64_t, int64_t, std::hash<uint64_t>> episode_refs_ ABSL_GUARDED_BY(mu_);
 
   // The total number of episodes that were at some point referenced by items
   // in the table but have since been removed. Is set to 0 when `Reset()`

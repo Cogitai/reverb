@@ -28,6 +28,15 @@ reverb_kernel_library(
     ],
 )
 
+reverb_kernel_library(
+    name = "local_table_dataset",
+    srcs = ["local_table_dataset.cc"],
+    deps = [
+        "//reverb/cc:local_table_sampler",
+        "//reverb/cc/platform:logging",
+    ],
+)
+
 reverb_gen_op_wrapper_py(
     name = "gen_client_ops",
     out = "gen_client_ops.py",
@@ -38,4 +47,10 @@ reverb_gen_op_wrapper_py(
     name = "gen_dataset_op",
     out = "gen_dataset_op.py",
     kernel_lib = ":dataset",
+)
+
+reverb_gen_op_wrapper_py(
+    name = "gen_local_table_dataset_op",
+    out = "gen_local_table_dataset_op.py",
+    kernel_lib = ":local_table_dataset",
 )

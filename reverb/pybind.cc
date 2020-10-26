@@ -528,6 +528,9 @@ PYBIND11_MODULE(libpybind, m) {
       .def("can_sample", &Table::CanSample,
            py::call_guard<py::gil_scoped_release>())
       .def("can_insert", &Table::CanInsert,
+           py::call_guard<py::gil_scoped_release>())
+      .def("get_ptr",
+           [](Table* table) { return (int64_t) table; },
            py::call_guard<py::gil_scoped_release>());
 
   py::class_<Writer>(m, "Writer")

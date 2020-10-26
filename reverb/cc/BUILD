@@ -148,6 +148,8 @@ reverb_cc_library(
     deps = [
         ":chunk_store",
         ":schema_cc_proto",
+        ":reverb_service_cc_grpc_proto",
+        ":reverb_service_cc_proto",
         "//reverb/cc/checkpointing:checkpoint_cc_proto",
         "//reverb/cc/selectors:interface",
         "//reverb/cc/platform:logging",
@@ -180,6 +182,22 @@ reverb_cc_library(
         "//reverb/cc/support:signature",
         "//reverb/cc/support:queue",
     ] + reverb_tf_deps() + reverb_grpc_deps() + reverb_absl_deps(),
+)
+
+reverb_cc_library(
+    name = "local_table_sampler",
+    srcs = ["local_table_sampler.cc"],
+    hdrs = ["local_table_sampler.h"],
+    deps = [
+        ":reverb_service_cc_proto",
+        ":sampler",
+        ":table",
+        ":tensor_compression",
+        "//reverb/cc/platform:logging",
+        "//reverb/cc/platform:thread",
+        "//reverb/cc/support:signature",
+        "//reverb/cc/support:queue",
+    ] + reverb_tf_deps() + reverb_absl_deps(),
 )
 
 reverb_cc_library(

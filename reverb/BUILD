@@ -25,6 +25,7 @@ reverb_pytype_strict_library(
         ":dataset",
         ":errors",
         ":item_selectors",
+        ":local_table_dataset",
         ":rate_limiters",
         ":replay_sample",
         ":server",
@@ -132,6 +133,18 @@ reverb_pytype_library(
         ":client",
         ":replay_sample",
         "//reverb/cc/ops:gen_dataset_op",
+    ],
+)
+
+reverb_pytype_library(
+    name = "local_table_dataset",
+    srcs = ["local_table_dataset.py"],
+    srcs_version = "PY3",
+    strict_deps = True,
+    deps = [
+        ":server",
+        ":replay_sample",
+        "//reverb/cc/ops:gen_local_table_dataset_op",
     ],
 )
 
