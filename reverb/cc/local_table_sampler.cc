@@ -215,6 +215,7 @@ tensorflow::Status LocalTableSampler::PopNextSample(
   }
 
   if (sampled_items_index_ == 0) {
+    sampled_items_.clear();
     auto status = table_->SampleFlexibleBatch(
         &sampled_items_,
         batch_size_,
@@ -225,8 +226,8 @@ tensorflow::Status LocalTableSampler::PopNextSample(
     sampled_items_index_ = sampled_items_.size();
   }
 
-  return AsSample(
-      sampled_items_[sampled_items_.size() - sampled_items_index_--], sample);
+  auto idx = sampled_items_.size() - sampled_items_index_--;
+  return AsSample(sampled_items_[idx], sample);
 }
 
 tensorflow::Status LocalTableSampler::Options::Validate() const {
